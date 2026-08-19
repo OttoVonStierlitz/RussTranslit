@@ -1,0 +1,626 @@
+<!-- saved from url=(0016)http://localhost -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RussTranslit – Russian Latin-to-Cyrillic Transliterator</title>
+  <meta name="description" content="A simple Russian transliterator for typing Cyrillic on a Latin keyboard, with a self-contained HTML download for offline use." />
+  <meta name="robots" content="index, follow" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231986cf'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Arial,sans-serif' font-size='40' font-weight='700' fill='white'%3EЯ%3C/text%3E%3C/svg%3E" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f0f4f8;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 32px 16px 48px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 480px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08);
+      background: rgb(25, 134, 207);
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.10);
+    }
+    .header svg { color: rgba(255,255,255,0.75); flex-shrink: 0; }
+    .header-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+    .header-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      margin-top: 1px;
+    }
+
+    /* ── Body ── */
+    .body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+
+    label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: rgba(255,255,255,0.5);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    textarea {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(245,237,216,0.55);
+      background: #f5edd8;
+      color: #3b2d1a;
+      font-size: 15px;
+      font-family: inherit;
+      padding: 10px 13px;
+      resize: none;
+      outline: none;
+      line-height: 1.55;
+      transition: box-shadow .15s;
+      min-height: 72px;
+      overflow-y: hidden;
+    }
+    textarea::placeholder { color: #a09070; }
+    textarea:focus { box-shadow: 0 0 0 3px rgba(255,255,255,0.35); }
+
+    /* ── Preview box ── */
+    .preview {
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.14);
+      padding: 10px 13px;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+    }
+    .preview p {
+      font-size: 15px;
+      color: #fff;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .preview-placeholder {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      font-style: italic;
+    }
+
+    /* ── Output area ── */
+    .output-area {
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.10);
+      padding: 10px 13px;
+      min-height: 52px;
+      font-size: 15px;
+      color: #fff;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+      cursor: text;
+      user-select: text;
+      position: relative;
+    }
+    .output-area:empty::before {
+      content: "Appended text will appear here…";
+      color: rgba(255,255,255,0.3);
+      font-style: italic;
+      font-size: 13px;
+    }
+
+    /* ── Buttons ── */
+    .btn-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .hint { font-size: 11px; color: rgba(255,255,255,0.5); display: flex; align-items: center; gap: 4px; flex: 1; }
+    .hint kbd {
+      font-size: 10px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-family: inherit;
+      color: rgba(255,255,255,0.7);
+    }
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 7px 14px;
+      border: 1px solid rgba(255,255,255,0.28);
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+      transition: background .15s, opacity .15s;
+      white-space: nowrap;
+    }
+    button:hover { background: rgba(255,255,255,0.28); }
+    button:active { opacity: .8; }
+    button:disabled { opacity: .35; cursor: not-allowed; }
+    button:disabled:hover { background: rgba(255,255,255,0.18); }
+
+    button.primary {
+      background: rgba(255,255,255,0.90);
+      color: rgb(25, 134, 207);
+      border-color: transparent;
+    }
+    button.primary:hover { background: #fff; }
+    button.primary:disabled { background: rgba(255,255,255,0.90); color: rgb(25, 134, 207); }
+
+    .icon-btn {
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+
+    /* ── Output row ── */
+    .output-header { display: flex; align-items: center; justify-content: space-between; }
+    .output-actions { display: flex; gap: 6px; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: rgba(20,20,20,0.90);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 9px 20px;
+      border-radius: 999px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s, transform .2s;
+      white-space: nowrap;
+      z-index: 999;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Reference ── */
+    .ref-toggle {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.08);
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .ref-toggle:hover { background: rgba(255,255,255,0.14); }
+    .ref-panel {
+      display: none;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.18);
+      padding: 14px;
+      gap: 12px;
+      flex-direction: column;
+    }
+    .ref-panel.open { display: flex; }
+    .ref-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 6px;
+    }
+    .ref-grid { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+    .ref-item { font-size: 12.5px; font-family: "Courier New", monospace; }
+    .ref-from { color: #fcd34d; }
+    .ref-arrow { color: rgba(255,255,255,0.35); margin: 0 3px; }
+    .ref-to { color: #fff; }
+    .ref-grid-single { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px 0; }
+    .ref-grid-single .ref-item { font-size: 12px; }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.13);
+    }
+
+
+    /* ── Page introduction and information ── */
+    .page-intro {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto 22px;
+      text-align: center;
+      color: #243447;
+    }
+    .page-intro h1 {
+      font-size: 20px;
+      line-height: 1.35;
+      margin: 0;
+      font-weight: 700;
+    }
+    .page-info {
+      width: 100%;
+      max-width: 760px;
+      margin: 26px auto 0;
+      color: #243447;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .page-info h2 {
+      margin: 28px 0 14px;
+      text-align: center;
+      font-size: 17px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+    .page-info p {
+      margin: 0 0 16px;
+    }
+    .page-info .offline-note {
+      margin-top: 24px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-intro">
+  <h1>RussTranslit – a transliterator for typing in Russian on a Latin keyboard</h1>
+</div>
+
+<div class="card">
+  <!-- Header -->
+  <div class="header">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+      <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 8v8m0-4h8M16 8v8"/>
+    </svg>
+    <div>
+      <div class="header-title">Russian Transliterator</div>
+      <div class="header-sub">Type in Latin · get Cyrillic</div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- Input -->
+    <div>
+      <label>Type in Latin</label>
+      <textarea
+        id="latinInput"
+        rows="3"
+        placeholder="e.g. privet, kak dela?"
+        autocomplete="off"
+        spellcheck="false"
+      ></textarea>
+    </div>
+
+    <!-- Live Cyrillic preview -->
+    <div>
+      <label>Cyrillic preview</label>
+      <div class="preview" id="preview">
+        <span class="preview-placeholder" id="previewPlaceholder">Your text will appear here…</span>
+        <p id="previewText" style="display:none"></p>
+      </div>
+    </div>
+
+    <!-- Action row: Copy + Append + Clear input -->
+    <div class="btn-row">
+      <span class="hint">
+        <kbd>Ctrl</kbd>+<kbd>Enter</kbd> to copy
+      </span>
+      <button id="btnCopy" class="primary" disabled>
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
+        Copy
+      </button>
+      <button id="btnAppend" disabled>
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+        Append
+      </button>
+      <button id="btnClearInput" class="icon-btn" title="Clear input">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Output / accumulation area -->
+    <div>
+      <div class="output-header">
+        <label style="margin-bottom:0">Accumulated text</label>
+        <div class="output-actions">
+          <button id="btnCopyOutput" class="icon-btn" title="Copy accumulated text" disabled>
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+          <button id="btnClearOutput" class="icon-btn" title="Clear accumulated text" disabled>
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <path d="M3 6h18M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div id="outputArea" class="output-area" style="margin-top:6px" contenteditable="true" spellcheck="false"></div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Reference table -->
+    <div>
+      <button class="ref-toggle" id="refToggle" type="button">
+        <span>Transliteration reference</span>
+        <svg id="refChevron" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+
+      <div class="ref-panel" id="refPanel">
+        <div>
+          <div class="ref-section-label">Multi-character sequences</div>
+          <div class="ref-grid" id="refSequences"></div>
+        </div>
+        <div>
+          <div class="ref-section-label">Single letters</div>
+          <div class="ref-grid ref-grid-single" id="refSingle"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+</div>
+
+<div class="page-info">
+  <h2>ABOUT RUSSTRANSLIT IN A NUTSHELL</h2>
+  <p>Since you have landed on this webpage, you may already have an idea about the usefulness of a Russian transliterator. But some of you have perhaps arrived here by pure accident searching for something else. So, I feel it to be my duty to provide a brief explanation. The need in Russian transliterators arose with the widespread use of personal computers some decades ago. It allows typing in Russian on a non-Russian keyboard. Consequently, it is in the first place useful for people living outside Russia where this piece of hardware is not readily available in computer shops. While modern editions of Windows and of other operating systems feature so called virtual keyboards which can simulate many keyboard layouts Russian included, working with these keyboards is not easy. Basically, the user can chose between two options: 1. typing with mouse-clicks, clicking the virtual keys on the screen one-by-one, 2. learning the Russian keyboard layout by heart and typing on a physical English, French, etc. keyboard. Neither of the two is very comfortable. Of course, you can learn touch-typing in several languages in which case you can do without a transliterator. But the great majority of us are not professional typists. I am not trying to persuade you to use my transliterator, you know if you need one or not. Anyhow, it is surprisingly hard to find a good Russian transliteartor on the Net. The spread of text-to-speech technologies (a third possibility of typing Russian I omitted above) might also contribute to the scarcity of this type of tools. But again, it is not always practical or feasible to dictate aloud your Russian private letters even if the technology for doing so is at your disposal. When I decided to write this app, my goal was to fulfil the demand for a simple, easy-to-use Russian transliterator. I hope you’ll find it useful and easy to learn.</p>
+
+  <h2>INSTRUCTIONS FOR USE</h2>
+  <p>The app is quite intuitive, so not much explanation is needed. The transliteration rules the app is using are very similar to those you’ll find in other apps of this kind. With a single mouse-click you can unfold the table of correspondences for quick reference on the go. You type your text with Latin letters in the top entry field. The Cyrillic transcript appears instantaneously in the field below. If you are composing a longer text, you have the possibility to write it in shorter chunks and accumulate the resulting text in the bottom field by clicking on Append. Should you want to insert words in Latin scrip into the Cyrillic text, you can type it directly in the accumulated text. That’s it. And one more important detail: Even using the transliterator online, the typing happens entirely on your computer, in your browser, the text is only visible on your computer-screen. Should you want even more independence, you can download the app for offline use saving it as HTML.</p>
+
+  <p class="offline-note"><strong>Offline use:</strong> You can download this page as <strong>HTML</strong> and use RussTranslit offline.</p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Transliteration engine (mirrors russian-transliterator.tsx) ──────────────
+const SEQUENCES = [
+  // 3-char
+  ["sch","щ"],["SCH","Щ"],["Sch","Щ"],
+  // 2-char
+  ["sh","ш"],["SH","Ш"],["Sh","Ш"],
+  ["ch","ч"],["CH","Ч"],["Ch","Ч"],
+  ["yu","ю"],["YU","Ю"],["Yu","Ю"],
+  ["ya","я"],["YA","Я"],["Ya","Я"],
+  ["e'","ё"],["E'","Ё"],
+  ['e"',"э"],['E"',"Э"],
+  // 1-char
+  ["a","а"],["A","А"],
+  ["b","б"],["B","Б"],
+  ["c","ц"],["C","Ц"],
+  ["d","д"],["D","Д"],
+  ["e","е"],["E","Е"],
+  ["f","ф"],["F","Ф"],
+  ["g","г"],["G","Г"],
+  ["h","х"],["H","Х"],
+  ["i","и"],["I","И"],
+  ["j","ж"],["J","Ж"],
+  ["k","к"],["K","К"],
+  ["l","л"],["L","Л"],
+  ["m","м"],["M","М"],
+  ["n","н"],["N","Н"],
+  ["o","о"],["O","О"],
+  ["p","п"],["P","П"],
+  ["q","ы"],["Q","Ы"],
+  ["r","р"],["R","Р"],
+  ["s","с"],["S","С"],
+  ["t","т"],["T","Т"],
+  ["u","у"],["U","У"],
+  ["v","в"],["V","В"],
+  ["y","й"],["Y","Й"],
+  ["z","з"],["Z","З"],
+  ['"',"ъ"],
+  ["'","ь"],
+];
+
+const REFERENCE_MULTI = [
+  ["sch","щ"],["sh","ш"],["ch","ч"],["yu","ю"],["ya","я"],["e'","ё"],['e"',"э"],
+];
+const REFERENCE_SINGLE = [
+  ["a","а"],["b","б"],["c","ц"],["d","д"],["e","е"],["f","ф"],["g","г"],
+  ["h","х"],["i","и"],["j","ж"],["k","к"],["l","л"],["m","м"],["n","н"],
+  ["o","о"],["p","п"],["q","ы"],["r","р"],["s","с"],["t","т"],["u","у"],
+  ["v","в"],["y","й"],["z","з"],["'","ь"],['"',"ъ"],
+];
+
+function transliterate(input) {
+  let result = "";
+  let i = 0;
+  while (i < input.length) {
+    let matched = false;
+    for (const [from, to] of SEQUENCES) {
+      if (input.startsWith(from, i)) {
+        result += to;
+        i += from.length;
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) { result += input[i]; i++; }
+  }
+  return result;
+}
+
+// ── UI wiring ─────────────────────────────────────────────────────────────────
+const latinInput    = document.getElementById("latinInput");
+const previewPlaceholder = document.getElementById("previewPlaceholder");
+const previewText   = document.getElementById("previewText");
+const btnCopy       = document.getElementById("btnCopy");
+const btnAppend     = document.getElementById("btnAppend");
+const btnClearInput = document.getElementById("btnClearInput");
+const outputArea    = document.getElementById("outputArea");
+const btnCopyOutput = document.getElementById("btnCopyOutput");
+const btnClearOutput= document.getElementById("btnClearOutput");
+const refToggle     = document.getElementById("refToggle");
+const refPanel      = document.getElementById("refPanel");
+const refChevron    = document.getElementById("refChevron");
+const toast         = document.getElementById("toast");
+let toastTimer;
+
+function showToast(msg) {
+  clearTimeout(toastTimer);
+  toast.textContent = msg;
+  toast.classList.add("show");
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2000);
+}
+
+function getCyrillic() { return transliterate(latinInput.value); }
+
+function updatePreview() {
+  const cyrillic = getCyrillic();
+  const hasInput = latinInput.value.length > 0;
+  const hasCyrillic = cyrillic.trim().length > 0;
+  previewPlaceholder.style.display = hasInput ? "none" : "";
+  previewText.style.display = hasInput ? "" : "none";
+  previewText.textContent = cyrillic;
+  btnCopy.disabled = !hasCyrillic;
+  btnAppend.disabled = !hasCyrillic;
+
+  // Auto-resize
+  latinInput.style.height = "auto";
+  latinInput.style.height = latinInput.scrollHeight + "px";
+}
+
+function updateOutputButtons() {
+  const hasOutput = outputArea.textContent.trim().length > 0;
+  btnCopyOutput.disabled = !hasOutput;
+  btnClearOutput.disabled = !hasOutput;
+}
+
+latinInput.addEventListener("input", updatePreview);
+
+latinInput.addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+    e.preventDefault();
+    if (!btnCopy.disabled) btnCopy.click();
+  }
+});
+
+btnCopy.addEventListener("click", () => {
+  const cyrillic = getCyrillic();
+  if (!cyrillic.trim()) return;
+  navigator.clipboard.writeText(cyrillic).then(() => {
+    showToast("✓ Copied to clipboard");
+    latinInput.value = "";
+    updatePreview();
+    latinInput.focus();
+  }).catch(() => {
+    // Fallback for older browsers / file:// contexts
+    const ta = document.createElement("textarea");
+    ta.value = cyrillic;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    showToast("✓ Copied to clipboard");
+    latinInput.value = "";
+    updatePreview();
+    latinInput.focus();
+  });
+});
+
+btnAppend.addEventListener("click", () => {
+  const cyrillic = getCyrillic();
+  if (!cyrillic.trim()) return;
+  const current = outputArea.textContent;
+  outputArea.textContent = current + (current.length > 0 ? " " : "") + cyrillic;
+  latinInput.value = "";
+  updatePreview();
+  updateOutputButtons();
+  latinInput.focus();
+});
+
+btnClearInput.addEventListener("click", () => {
+  latinInput.value = "";
+  updatePreview();
+  latinInput.focus();
+});
+
+btnCopyOutput.addEventListener("click", () => {
+  const text = outputArea.textContent;
+  if (!text.trim()) return;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast("✓ Accumulated text copied");
+  }).catch(() => {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    showToast("✓ Accumulated text copied");
+  });
+});
+
+btnClearOutput.addEventListener("click", () => {
+  outputArea.textContent = "";
+  updateOutputButtons();
+});
+
+// Reference toggle
+refToggle.addEventListener("click", () => {
+  const isOpen = refPanel.classList.toggle("open");
+  refChevron.style.transform = isOpen ? "rotate(180deg)" : "";
+});
+
+// Build reference table
+function refItem(from, to) {
+  return `<span class="ref-item"><span class="ref-from">${from}</span><span class="ref-arrow">→</span><span class="ref-to">${to}</span></span>`;
+}
+document.getElementById("refSequences").innerHTML =
+  REFERENCE_MULTI.map(([f,t]) => refItem(f,t)).join("");
+document.getElementById("refSingle").innerHTML =
+  REFERENCE_SINGLE.map(([f,t]) => refItem(f,t)).join("");
+
+// Focus input on load
+latinInput.focus();
+</script>
+</body>
+</html>
