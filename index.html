@@ -5,9 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RussTranslit – Russian Latin-to-Cyrillic Transliterator</title>
-  <meta name="description" content="A simple Russian transliterator for typing Cyrillic on a Latin keyboard, with a self-contained HTML download for offline use." />
-  <meta name="robots" content="index, follow" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231986cf'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Arial,sans-serif' font-size='40' font-weight='700' fill='white'%3EЯ%3C/text%3E%3C/svg%3E" />
+  <meta name="description" content="RussTranslit is a simple Russian transliterator for typing in Russian on a Latin keyboard. Available online and as a downloadable HTML app for offline use." />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -16,7 +14,7 @@
       background: #f0f4f8;
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
+      flex-direction: column;F
       align-items: center;
       justify-content: flex-start;
       padding: 32px 16px 48px;
@@ -25,7 +23,7 @@
     .card {
       width: 100%;
       max-width: 576px;
-      border-radius: ;
+      border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 8px 40px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08);
       background: rgb(25, 134, 207);
@@ -36,7 +34,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 16px ;
+      padding: 16px 20px;
       border-bottom: 1px solid rgba(255,255,255,0.18);
       background: rgba(255,255,255,0.10);
     }
@@ -192,7 +190,7 @@
       color: #fff;
       font-size: 13px;
       font-weight: 500;
-      padding: 9px ;
+      padding: 9px 20px;
       border-radius: 999px;
       opacity: 0;
       pointer-events: none;
@@ -248,43 +246,59 @@
     .ref-grid-single { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px 0; }
     .ref-grid-single .ref-item { font-size: 12px; }
 
-    /* ── Page introduction and information ── */
+    /* ── Page heading and bilingual information ── */
     .page-intro {
       width: 100%;
-      max-width: 760px;
-      margin: 0 auto 22px;
-      padding: 0 18px;
+      max-width: 1100px;
+      margin: 0 auto 24px;
       text-align: center;
-      color: #243447;
+      padding: 0 16px;
     }
     .page-intro h1 {
       font-size: 32px;
-      line-height: 1.35;
-      margin: 0;
+      line-height: 1.25;
       font-weight: 700;
+      color: #243447;
     }
-    .page-info {
+    .bilingual {
       width: 100%;
-      max-width: 760px;
-      margin: 26px auto 0;
-      padding: 0 18px;
+      max-width: 1100px;
+      margin: 28px auto 0;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 42px;
       color: #243447;
       font-size: 15px;
       line-height: 1.6;
     }
-    .page-info h2 {
-      margin: 28px 0 14px;
+    .language-section h2 {
+      margin: 0 0 18px;
       text-align: center;
-      font-size: 17px;
+      font-size: 18px;
       line-height: 1.35;
       font-weight: 700;
     }
-    .page-info p {
-      margin: 0 0 16px;
+    .language-section p {
+      margin: 0 0 18px;
     }
-    .page-info .offline-note {
-      margin-top: 24px;
+    .offline-note {
+      margin-top: 24px !important;
       text-align: center;
+      font-weight: 600;
+    }
+    @media (max-width: 900px) {
+      .bilingual {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        max-width: 760px;
+      }
+      .language-section:first-child { order: 1; }
+      .language-section:last-child { order: 2; }
+    }
+    @media (max-width: 620px) {
+      .page-intro h1 { font-size: 26px; }
+      .bilingual { padding: 0 16px; }
     }
 
     /* ── Divider ── */
@@ -297,7 +311,7 @@
 <body>
 
 <div class="page-intro">
-  <h1>RussTranslit – a transliterator for typing in Russian on a Latin keyboard</h1>
+  <h1>RussTranslit – a transliterator for typing in<br>Russian on a Latin keyboard</h1>
 </div>
 
 <div class="card">
@@ -405,19 +419,21 @@
   </div><!-- /body -->
 </div>
 
-<div class="page-info">
-  <h2>ABOUT RUSSTRANSLIT IN A NUTSHELL</h2>
-  <p>Since you have landed on this webpage, you may already have an idea about the usefulness of a Russian transliterator. But some of you have perhaps arrived here by pure accident searching for something else. So, I feel it to be my duty to provide a brief explanation. The need in Russian transliterators arose with the widespread use of personal computers some decades ago. It allows typing in Russian on a non-Russian keyboard.
-  Consequently, it is in the first place useful for people living outside Russia where this piece of hardware is not readily available in computer shops. While modern editions of Windows and of other operating systems feature so called virtual keyboards which can simulate many keyboard layouts Russian included, working with these keyboards is not easy. Basically, the user can chose between two options: 1. typing with mouse-clicks, clicking the virtual keys on the screen one-by-one, 2.
-  learning the Russian keyboard layout by heart and typing on a physical English, French, etc. keyboard. Neither of the two is very comfortable. Of course, you can learn touch-typing in several languages in which case you can do without a transliterator. But the great majority of us are not professional typists. I am not trying to persuade you to use my transliterator, you know if you need one or not. Anyhow, it is surprisingly hard to find a good Russian transliteartor on the Net.
-  The spread of text-to-speech technologies (a third possibility of typing Russian I omitted above) might also contribute to the scarcity of this type of tools. But again, it is not always practical or feasible to dictate aloud your Russian private letters even if the technology for doing so is at your disposal. When I decided to write this app, my goal was to fulfil the demand for a simple, easy-to-use Russian transliterator. I hope you’ll find it useful and easy to learn.</p>
-
-  <h2>INSTRUCTIONS FOR USE</h2>
-  <p>The app is quite intuitive, so not much explanation is needed. The transliteration rules the app is using are very similar to those you’ll find in other apps of this kind. With a single mouse-click you can unfold the table of correspondences for quick reference on the go. You type your text with Latin letters in the top entry field. The Cyrillic transcript appears instantaneously in the field below.
-  If you are composing a longer text, you have the possibility to write it in shorter chunks and accumulate the resulting text in the bottom field by clicking on Append. Should you want to insert words in Latin scrip into the Cyrillic text, you can type it directly in the accumulated text. That’s it. And one more important detail: Even using the transliterator online, the typing happens entirely on your computer, in your browser, the text is only visible on your computer-screen.
-  Should you want even more independence, you can download the app for offline use saving it as HTML.</p>
-
-  <p class="offline-note"><strong>Offline use:</strong> You can download this page as <strong>HTML</strong> and use RussTranslit offline.</p>
+<div class="bilingual">
+  <section class="language-section">
+    <h2>О RUSSTRANSLIT В ДВУХ СЛОВАХ</h2>
+    <p>Раз вы оказались на этой веб-странице, вы, возможно, уже представляете себе, чем может быть полезен русский транслитератор. Но некоторые из вас, возможно, попали сюда совершенно случайно, ища что-то совсем другое. Поэтому считаю своим долгом вкратце объяснить, для чего он нужен. Потребность в русских транслитераторах возникла с широким распространением персональных компьютеров несколько десятилетий назад. Они позволяют набирать русский текст на нерусской клавиатуре. Поэтому в первую очередь такой инструмент полезен людям, живущим за пределами России, где русскую клавиатуру не всегда легко найти в магазинах компьютерной техники. Современные версии Windows и других операционных систем предлагают так называемые виртуальные клавиатуры, позволяющие имитировать различные раскладки, в том числе русскую. Однако пользоваться такими клавиатурами не очень удобно. По сути, у пользователя есть два варианта: 1) набирать текст мышью, последовательно нажимая виртуальные клавиши на экране; 2) выучить русскую раскладку наизусть и печатать на физической клавиатуре с английскими, французскими и т. п. обозначениями. Ни один из этих вариантов нельзя назвать особенно удобным. Разумеется, можно научиться слепой печати на нескольких языках — тогда транслитератор вам вообще не понадобится. Но подавляющее большинство из нас не профессиональные машинистки или машинисты. Я не пытаюсь убедить вас пользоваться именно моим транслитератором — вы сами знаете, нужен он вам или нет. Во всяком случае, удивительно трудно найти в Интернете хороший транслитератор для русского языка. Распространение технологий преобразования речи в текст — ещё одной возможности набирать русский текст, которую я не упомянул выше — тоже, возможно, способствовало тому, что подобных инструментов стало меньше. Но и здесь есть проблема: далеко не всегда удобно или возможно диктовать вслух свои личные письма на русском, даже если соответствующая технология находится в вашем распоряжении. Когда я решил написать это приложение, моей целью было удовлетворить потребность в простом и удобном русском транслитераторе. Надеюсь, он окажется для вас полезным и его будет легко освоить.</p>
+    <h2>ИНСТРУКЦИЯ ПО ИСПОЛЬЗОВАНИЮ</h2>
+    <p>Приложение достаточно интуитивно, поэтому особых объяснений не требуется. Используемые в нём правила транслитерации очень похожи на правила других приложений этого типа. Одним щелчком мыши можно развернуть таблицу соответствий и при необходимости быстро свериться с ней. Вы вводите текст латинскими буквами в верхнее поле. Транслитерация кириллицей мгновенно появляется в расположенном ниже поле. Если вы набираете более длинный текст, можно работать небольшими фрагментами и накапливать полученный текст в нижнем поле, нажимая на Append. Если же вы хотите вставить в кириллический текст отдельные слова латиницей, их можно непосредственно набрать в поле с накопленным текстом. Вот и всё. И ещё одна важная деталь: даже при использовании транслитератора онлайн весь процесс набора происходит непосредственно на вашем компьютере, в вашем браузере; вводимый текст виден только на экране вашего компьютера. Если вы хотите быть ещё более независимыми от Интернета, приложение можно скачать для использования в автономном режиме, сохранив его в формате HTML.</p>
+    <p class="offline-note">Автономное использование: эту страницу можно скачать в формате HTML и пользоваться RussTranslit без подключения к Интернету.</p>
+  </section>
+  <section class="language-section">
+    <h2>ABOUT RUSSTRANSLIT IN A NUTSHELL</h2>
+    <p>Since you have landed on this webpage, you may already have an idea about the usefulness of a Russian transliterator. But some of you have perhaps arrived here by pure accident searching for something else. So, I feel it to be my duty to provide a brief explanation. The need in Russian transliterators arose with the widespread use of personal computers some decades ago. It allows typing in Russian on a non-Russian keyboard. Consequently, it is in the first place useful for people living outside Russia where this piece of hardware is not readily available in computer shops. While modern editions of Windows and of other operating systems feature so called virtual keyboards which can simulate many keyboard layouts Russian included, working with these keyboards is not easy. Basically, the user can chose between two options: 1. typing with mouse-clicks, clicking the virtual keys on the screen one-by-one, 2. learning the Russian keyboard layout by heart and typing on a physical English, French, etc. keyboard. Neither of the two is very comfortable. Of course, you can learn touch-typing in several languages in which case you can do without a transliterator. But the great majority of us are not professional typists. I am not trying to persuade you to use my transliterator, you know if you need one or not. Anyhow, it is surprisingly hard to find a good Russian transliteartor on the Net. The spread of text-to-speech technologies (a third possibility of typing Russian I omitted above) might also contribute to the scarcity of this type of tools. But again, it is not always practical or feasible to dictate aloud your Russian private letters even if the technology for doing so is at your disposal. When I decided to write this app, my goal was to fulfil the demand for a simple, easy-to-use Russian transliterator. I hope you’ll find it useful and easy to learn.</p>
+    <h2>INSTRUCTIONS FOR USE</h2>
+    <p>The app is quite intuitive, so not much explanation is needed. The transliteration rules the app is using are very similar to those you’ll find in other apps of this kind. With a single mouse-click you can unfold the table of correspondences for quick reference on the go. You type your text with Latin letters in the top entry field. The Cyrillic transcript appears instantaneously in the field below. If you are composing a longer text, you have the possibility to write it in shorter chunks and accumulate the resulting text in the bottom field by clicking on Append. Should you want to insert words in Latin scrip into the Cyrillic text, you can type it directly in the accumulated text. That’s it. And one more important detail: Even using the transliterator online, the typing happens entirely on your computer, in your browser, the text is only visible on your computer-screen. Should you want even more independence, you can download the app for offline use saving it as HTML.</p>
+    <p class="offline-note">Offline use: You can download this page as HTML and use RussTranslit offline.</p>
+  </section>
 </div>
 
 <div class="toast" id="toast"></div>
